@@ -26,4 +26,6 @@ Pracuję analitycznie: najpierw rozkładam problem na decyzje architektoniczne, 
 
 ## Kontakt
 
-_Placeholder na dane kontaktowe (email / LinkedIn / strona)._
+- Email: orqestr8r@gmail.com
+- LinkedIn: _placeholder_
+- Strona: _placeholder_
