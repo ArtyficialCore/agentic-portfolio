@@ -15,17 +15,17 @@ Pracuję analitycznie: najpierw rozkładam problem na decyzje architektoniczne, 
 
 ## Projekty
 
-| Projekt | Obszar | Status |
-| --- | --- | --- |
-| `01-email-agent` | Automatyzacja obsługi email i workflow komunikacji | 🔨 W budowie |
-| `02-lead-qualifier` | Kwalifikacja leadów i priorytetyzacja szans sprzedażowych | 🔨 W budowie |
-| `03-rag-document-qa` | Odpowiedzi na pytania na podstawie dokumentów (RAG) | 🔨 W budowie |
-| `04-research-agent` | Zbieranie i synteza researchu z wielu źródeł | 🔨 W budowie |
-| `05-content-crew` | Wieloagentowa produkcja i redakcja treści | 🔨 W budowie |
-| `06-mcp-server` | Integracje narzędzi przez serwer MCP | 🔨 W budowie |
+| Projekt              | Obszar                                                    | Status       |
+| -------------------- | --------------------------------------------------------- | ------------ |
+| `01-email-agent`     | Automatyzacja obsługi email i workflow komunikacji        | 🔨 W budowie |
+| `02-lead-qualifier`  | Kwalifikacja leadów i priorytetyzacja szans sprzedażowych | 🔨 W budowie |
+| `03-rag-document-qa` | Odpowiedzi na pytania na podstawie dokumentów (RAG)       | 🔨 W budowie |
+| `04-research-agent`  | Zbieranie i synteza researchu z wielu źródeł              | 🔨 W budowie |
+| `05-content-crew`    | Wieloagentowa produkcja i redakcja treści                 | 🔨 W budowie |
+| `06-mcp-server`      | Integracje narzędzi przez serwer MCP                      | 🔨 W budowie |
 
 ## Kontakt
 
-- Email: orqestr8r@gmail.com
-- LinkedIn: _placeholder_
-- Strona: _placeholder_
+- Email: [orqestr8r@gmail.com](mailto:orqestr8r@gmail.com)
+- LinkedIn: *placeholder*
+- Strona: *placeholder*
