@@ -1,0 +1,290 @@
+{
+  "name": "MailAgent",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 15,
+              "unit": "minutes"
+            }
+          ]
+        },
+        "filters": {
+          "includeSpamTrash": true
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d9ebcdb6-94bd-44d2-bfd1-fbc07572d14c",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "gm6TrFYVFpzCnW8T",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $json.snippet }}{{ $json.Subject }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "urgent"
+            },
+            {
+              "category": "normal"
+            },
+            {
+              "category": "spam"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "5a4f1703-6995-4840-957f-4b3ac90f68e1",
+      "name": "Text Classifier"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-haiku-4-5-20251001",
+          "mode": "list",
+          "cachedResultName": "Claude Haiku 4.5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        144,
+        208
+      ],
+      "id": "d6786c86-b4d4-4e78-800f-92377c6e6236",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "pmgo1s2AUkP6iiCQ",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "6126101056",
+        "text": "=🚨 URGENT EMAIL!{{ $('Gmail Trigger').item.json.From }}{{ $('Gmail Trigger').item.json.Subject }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        512,
+        -192
+      ],
+      "id": "737a132a-d4bf-47d3-8e35-90c983b7e62b",
+      "name": "Send a text message",
+      "webhookId": "2f2acbd9-30a5-48ac-b1d7-b7f5f69fb67e",
+      "credentials": {
+        "telegramApi": {
+          "id": "BZ7UeLjoTRhpwTAu",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $('Gmail Trigger').item.json.id }}",
+        "labelIds": [
+          "SPAM"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        368,
+        448
+      ],
+      "id": "4c33146c-c4e6-4768-a32b-9cc44b156bd4",
+      "name": "Add label to message",
+      "webhookId": "62ddcb0a-33eb-44c0-9179-60fb2a19e237",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "gm6TrFYVFpzCnW8T",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Jesteś profesjonalnym asystentem email. \n\nOtrzymałem następującą wiadomość:\nOd: {{ $('Gmail Trigger').item.json.from }}\nTemat: {{ $('Gmail Trigger').item.json.subject }}\nTreść: {{ $('Gmail Trigger').item.json.snippet }}\n\nNapisz uprzejmą, profesjonalną odpowiedź w tym samym języku co email. \nOdpowiedź powinna być krótka i konkretna.\nZakończ zwrotem \"Z poważaniem\" i zostaw miejsce na podpis.",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        640,
+        32
+      ],
+      "id": "2d3e6dba-f9f4-43b5-a4e2-4aaa4c9c11ce",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "=Re:{{ $('Gmail Trigger').item.json.Subject }}",
+        "message": "={{ $json.text }}",
+        "options": {
+          "threadId": "={{ $('Gmail Trigger').item.json.threadId }}"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1040,
+        272
+      ],
+      "id": "b19d88e4-18c9-4822-837f-a0045ecf7fb4",
+      "name": "Create a draft",
+      "webhookId": "66c9904b-742a-4464-96cf-351e964a070a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "gm6TrFYVFpzCnW8T",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-haiku-4-5-20251001",
+          "mode": "list",
+          "cachedResultName": "Claude Haiku 4.5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        704,
+        272
+      ],
+      "id": "d514ee20-4e85-4f9e-9992-744d675e7d4c",
+      "name": "Anthropic Chat Model1",
+      "credentials": {
+        "anthropicApi": {
+          "id": "pmgo1s2AUkP6iiCQ",
+          "name": "Anthropic account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Classifier": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Add label to message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Create a draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "timezone": "Europe/Warsaw",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveExecutionProgress": true,
+    "saveManualExecutions": false,
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "18fb5caa-1b0e-445f-8367-167513f469ae",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "39135d242b1bd63c7aeb237798e6c309cd1826d6bca5e06a48c84337aabc0910"
+  },
+  "id": "HWnXKBFvrtknhEG6",
+  "tags": []
+}
