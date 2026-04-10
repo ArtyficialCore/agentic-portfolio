@@ -1,7 +1,28 @@
+# Secrets — nigdy do repo
 .env
-__pycache__
-.venv
-node_modules
-*.pyc
+.env.*
+!.env.example
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+
+# Node
+node_modules/
+
+# System / IDE
 .DS_Store
+*.swp
+.idea/
+
+# Lokalne bazy i logi
 *.db
+*.log
